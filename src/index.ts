@@ -60,10 +60,10 @@ export async function run(inputFiles: string[], jsonFile: string | undefined, sc
             await writeFileAsync(jsonFile, JSON.stringify(variables, null, "  "));
         }
         if (scssFile) {
-            await writeFileAsync(scssFile, variables.map(v => `$${v.name}: '${v.base64}';`).join("\n"));
+            await writeFileAsync(scssFile, variables.map(v => `$${v.name}: '${v.base64}';\n`).join(""));
         }
         if (lessFile) {
-            await writeFileAsync(lessFile, variables.map(v => `@${v.name}: '${v.base64}';`).join("\n"));
+            await writeFileAsync(lessFile, variables.map(v => `@${v.name}: '${v.base64}';\n`).join(""));
         }
     }
 }
