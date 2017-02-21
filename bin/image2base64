@@ -1,2 +1,3 @@
 #!/usr/bin/env node
-require("../dist/index.js");
+const cli = require("../dist/index.js");
+cli.executeCommandLine();

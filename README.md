@@ -6,3 +6,23 @@
 
 # image2base64-cli
 A CLI tool to convert image file to base64 string.
+
+#### install
+
+`npm i image2base64-cli -g`
+
+#### usage
+
+`image2base64-cli favicon.ico --scss`
+
+or
+
+`image2base64-cli *.ico --scss a.scss`
+
+or
+
+`image2base64-cli *.ico --less a.less`
+
+or
+
+`image2base64-cli *.ico --scss --less --json a.json`
