@@ -1,0 +1,41 @@
+{
+  "name": "image2base64-cli",
+  "version": "1.0.0",
+  "description": "A CLI tool to convert image file to base64 string.",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc -p src",
+    "lint": "tslint \"*.ts\"",
+    "test": "tsc -p spec && jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plantain-00/image2base64-cli.git"
+  },
+  "keywords": [
+    "image",
+    "base64",
+    "cli"
+  ],
+  "author": "York Yao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/plantain-00/image2base64-cli/issues"
+  },
+  "homepage": "https://github.com/plantain-00/image2base64-cli#readme",
+  "devDependencies": {
+    "@types/glob": "5.0.30",
+    "@types/jasmine": "2.5.43",
+    "@types/minimist": "1.2.0",
+    "@types/node": "7.0.5",
+    "jasmine": "2.5.3",
+    "tslint": "4.4.2",
+    "typescript": "2.1.6"
+  },
+  "dependencies": {
+    "glob": "7.1.1",
+    "lodash.flatten": "4.4.0",
+    "lodash.uniq": "4.5.0",
+    "minimist": "1.2.0"
+  }
+}
