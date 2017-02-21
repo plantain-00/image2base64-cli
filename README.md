@@ -17,12 +17,12 @@ A CLI tool to convert image file to base64 string.
 
 or
 
-`image2base64-cli *.ico --scss a.scss`
+`image2base64-cli *.ico --scss variables.scss`
 
 or
 
-`image2base64-cli *.ico --less a.less`
+`image2base64-cli *.ico --less variables.less`
 
 or
 
-`image2base64-cli *.ico --scss --less --json a.json`
+`image2base64-cli *.ico --scss variables.scss --less variables.less --json variables.json`
