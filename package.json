@@ -29,8 +29,8 @@
     "@types/minimist": "1.2.0",
     "@types/node": "7.0.5",
     "jasmine": "2.5.3",
-    "tslint": "4.4.2",
-    "typescript": "2.1.6"
+    "tslint": "4.5.1",
+    "typescript": "2.2.1"
   },
   "dependencies": {
     "file-type": "4.1.0",
@@ -38,7 +38,7 @@
     "lodash.flatten": "4.4.0",
     "lodash.uniq": "4.5.0",
     "minimist": "1.2.0",
-    "tslib": "1.5.0"
+    "tslib": "1.6.0"
   },
   "bin": {
     "image2base64-cli": "./bin/image2base64"
