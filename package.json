@@ -25,12 +25,12 @@
   "homepage": "https://github.com/plantain-00/image2base64-cli#readme",
   "devDependencies": {
     "@types/glob": "5.0.30",
-    "@types/jasmine": "2.5.43",
+    "@types/jasmine": "2.5.47",
     "@types/minimist": "1.2.0",
-    "@types/node": "7.0.5",
+    "@types/node": "7.0.12",
     "jasmine": "2.5.3",
-    "tslint": "4.5.1",
-    "typescript": "2.2.1"
+    "tslint": "5.0.0",
+    "typescript": "2.2.2"
   },
   "dependencies": {
     "file-type": "4.1.0",
