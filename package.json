@@ -4,9 +4,10 @@
   "description": "A CLI tool to convert image file to base64 string.",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc -p src",
+    "build": "npm run clean && tsc -p src",
     "lint": "tslint \"*.ts\"",
-    "test": "tsc -p demo && node demo/test.js"
+    "test": "tsc -p demo && node demo/test.js",
+    "clean": "rimraf dist"
   },
   "repository": {
     "type": "git",
@@ -29,8 +30,9 @@
     "@types/minimist": "1.2.0",
     "@types/node": "7.0.12",
     "jasmine": "2.5.3",
+    "rimraf": "2.6.1",
     "tslint": "5.0.0",
-    "typescript": "2.2.2"
+    "typescript": "2.3.2"
   },
   "dependencies": {
     "file-type": "4.1.0",
