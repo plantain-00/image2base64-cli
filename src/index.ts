@@ -2,9 +2,9 @@ import * as fs from "fs";
 import * as minimist from "minimist";
 import * as glob from "glob";
 import * as path from "path";
-const fileType: (buffer: Buffer) => { ext: string; mime: string } = require("file-type");
-const flatten: <T>(array: T[][]) => T[] = require("lodash.flatten");
-const uniq: <T>(array: T[]) => T[] = require("lodash.uniq");
+import * as fileType from "file-type";
+import * as flatten from "lodash.flatten";
+import * as uniq from "lodash.uniq";
 
 function globAsync(pattern: string) {
     return new Promise<string[]>((resolve, reject) => {
