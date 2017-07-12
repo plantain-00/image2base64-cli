@@ -5,6 +5,7 @@ import * as path from "path";
 import * as fileType from "file-type";
 import * as flatten from "lodash.flatten";
 import * as uniq from "lodash.uniq";
+import * as camelcase from "camelcase";
 
 function globAsync(pattern: string) {
     return new Promise<string[]>((resolve, reject) => {
@@ -42,33 +43,52 @@ function writeFileAsync(filename: string, data: string) {
     });
 }
 
-export async function run(inputFiles: string[], jsonFile: string | undefined, scssFile: string | undefined, lessFile: string | undefined) {
+function getVariableName(filePath: string) {
+    return camelcase(path.normalize(filePath).replace(/\\|\//g, "-"));
+}
+
+function printInConsole(message: any) {
+    // tslint:disable-next-line:no-console
+    console.log(message);
+}
+
+export async function executeCommandLine() {
+    const argv = minimist(process.argv.slice(2), { "--": true });
+
     const filePaths: string[][] = [];
-    for (const filePath of inputFiles) {
+    for (const filePath of argv._) {
         filePaths.push(await globAsync(filePath));
     }
     const flattenedFilePaths = uniq(flatten(filePaths));
     if (flattenedFilePaths.length > 0) {
         const variables: { name: string; base64: string }[] = [];
+        const base = argv.base;
         for (const filePath of flattenedFilePaths) {
             const buffer = await readFileAsync(filePath);
             const mime = fileType(buffer).mime;
             const base64 = `data:${mime};base64,${buffer.toString("base64")}`;
-            variables.push({ name: path.basename(filePath).replace(".", "-"), base64 });
+            variables.push({ name: base ? path.relative(base, filePath) : filePath, base64 });
         }
-        if (jsonFile) {
-            await writeFileAsync(jsonFile, JSON.stringify(variables, null, "  "));
+        if (argv.json) {
+            await writeFileAsync(argv.json, JSON.stringify(variables, null, "  "));
         }
-        if (scssFile) {
-            await writeFileAsync(scssFile, variables.map(v => `$${v.name}: '${v.base64}';\n`).join(""));
+        if (argv.scss) {
+            await writeFileAsync(argv.scss, variables.map(v => `$${v.name.replace(".", "-")}: '${v.base64}';\n`).join(""));
         }
-        if (lessFile) {
-            await writeFileAsync(lessFile, variables.map(v => `@${v.name}: '${v.base64}';\n`).join(""));
+        if (argv.less) {
+            await writeFileAsync(argv.less, variables.map(v => `@${v.name.replace(".", "-")}: '${v.base64}';\n`).join(""));
+        }
+        if (argv.es6) {
+            await writeFileAsync(argv.es6, variables.map(v => `export const ${getVariableName(v.name)} = "${v.base64}";\n`).join(""));
         }
     }
+
+    printInConsole("success");
 }
 
-export function executeCommandLine() {
-    const argv = minimist(process.argv.slice(2), { "--": true });
-    run(argv["_"], argv["json"], argv["scss"], argv["less"]);
+try {
+    executeCommandLine();
+} catch (error) {
+    printInConsole(error);
+    process.exit(1);
 }

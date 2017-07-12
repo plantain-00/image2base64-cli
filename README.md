@@ -25,4 +25,18 @@ or
 
 or
 
-`image2base64-cli *.ico --scss variables.scss --less variables.less --json variables.json`
+`image2base64-cli *.ico --es6 variables.js`
+
+or
+
+`image2base64-cli *.ico --scss variables.scss --less variables.less --json variables.json --es6 variables.js --base demo`
+
+#### change logs
+
+```
+// v2
+the variable name will be the whole path relative to `base`(by `--base basename`)
+
+// v1
+the variable name is the name of the image file
+```
