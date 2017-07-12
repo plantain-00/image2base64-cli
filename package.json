@@ -1,6 +1,6 @@
 {
   "name": "image2base64-cli",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A CLI tool to convert image file to base64 string.",
   "main": "src/index.ts",
   "scripts": {
