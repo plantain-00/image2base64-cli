@@ -1,6 +1,6 @@
 {
   "name": "image2base64-cli",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A CLI tool to convert image file to base64 string.",
   "main": "src/index.ts",
   "scripts": {
@@ -8,7 +8,8 @@
     "lint": "tslint \"*.ts\"",
     "demo": "node dist/index.js demo/favicon.ico --json demo/variables.json --scss demo/variables.scss --less demo/variables.less --es6 demo/variables.js --base demo",
     "clean": "rimraf dist",
-    "test": "tsc -p spec && jasmine"
+    "test": "tsc -p spec && jasmine",
+    "release": "clean-release"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "@types/jasmine": "2.5.53",
     "@types/minimist": "1.2.0",
     "@types/node": "8.0.7",
+    "clean-release": "1.0.3",
     "jasmine": "2.6.0",
     "rimraf": "2.6.1",
     "tslint": "5.4.3",
