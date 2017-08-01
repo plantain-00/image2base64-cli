@@ -1,6 +1,7 @@
 [![Dependency Status](https://david-dm.org/plantain-00/image2base64-cli.svg)](https://david-dm.org/plantain-00/image2base64-cli)
 [![devDependency Status](https://david-dm.org/plantain-00/image2base64-cli/dev-status.svg)](https://david-dm.org/plantain-00/image2base64-cli#info=devDependencies)
-[![Build Status](https://travis-ci.org/plantain-00/image2base64-cli.svg?branch=master)](https://travis-ci.org/plantain-00/image2base64-cli)
+[![Build Status: Linux](https://travis-ci.org/plantain-00/image2base64-cli.svg?branch=master)](https://travis-ci.org/plantain-00/image2base64-cli)
+[![Build Status: Windows](https://ci.appveyor.com/api/projects/status/github/plantain-00/image2base64-cli?branch=master&svg=true)](https://ci.appveyor.com/project/plantain-00/image2base64-cli/branch/master)
 [![npm version](https://badge.fury.io/js/image2base64-cli.svg)](https://badge.fury.io/js/image2base64-cli)
 [![Downloads](https://img.shields.io/npm/dm/image2base64-cli.svg)](https://www.npmjs.com/package/image2base64-cli)
 
