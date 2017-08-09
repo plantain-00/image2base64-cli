@@ -11,6 +11,9 @@ module.exports = {
     'tsc -p spec',
     'jasmine'
   ],
-  fix: `standard --fix "**/*.config.js"`,
+  fix: {
+    ts: `tslint --fix "*.ts"`,
+    js: `standard --fix "**/*.config.js"`
+  },
   release: `clean-release`
 }
