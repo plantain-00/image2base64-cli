@@ -86,9 +86,9 @@ async function executeCommandLine() {
     printInConsole("success");
 }
 
-try {
-    executeCommandLine();
-} catch (error) {
+executeCommandLine().then(() => {
+    printInConsole("image to base64 success.");
+}, error => {
     printInConsole(error);
     process.exit(1);
-}
+});
