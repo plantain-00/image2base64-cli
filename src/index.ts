@@ -100,11 +100,7 @@ async function executeCommandLine() {
     }
 
     if (uniqFiles.length > 0) {
-        const promises: Promise<Variable>[] = [];
-        for (const file of uniqFiles) {
-            promises.push(imageToBase64(file, base));
-        }
-        const variables = await Promise.all(promises);
+        const variables = await Promise.all(uniqFiles.map(file => imageToBase64(file, base)));
         await writeVariables(argv, variables);
     }
 }
