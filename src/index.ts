@@ -20,18 +20,6 @@ function globAsync(pattern: string) {
     });
 }
 
-function readFileAsync(filename: string) {
-    return new Promise<Buffer>((resolve, reject) => {
-        fs.readFile(filename, (error, data) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(data);
-            }
-        });
-    });
-}
-
 function writeFileAsync(filename: string, data: string) {
     return new Promise<void>((resolve, reject) => {
         fs.writeFile(filename, data, (error) => {
@@ -75,7 +63,6 @@ async function executeCommandLine() {
         let count = 0;
         chokidar.watch(inputFiles).on("all", (type: string, file: string) => {
             printInConsole(`Detecting ${type}: ${file}`);
-            count++;
             if (type === "add" || type === "change") {
                 const index = variables.findIndex(v => v.file === file);
                 imageToBase64(file, base).then(variable => {
@@ -84,6 +71,7 @@ async function executeCommandLine() {
                     } else {
                         variables[index] = variable;
                     }
+                    count++;
                     if (count >= uniqFiles.length) {
                         writeVariables(argv, variables);
                     }
@@ -96,20 +84,24 @@ async function executeCommandLine() {
                 }
             }
         });
-        return;
-    }
-
-    if (uniqFiles.length > 0) {
+    } else if (uniqFiles.length > 0) {
         const variables = await Promise.all(uniqFiles.map(file => imageToBase64(file, base)));
         await writeVariables(argv, variables);
     }
 }
 
-async function imageToBase64(file: string, base: string) {
-    const buffer = await readFileAsync(file);
-    const mime = fileType(buffer).mime;
-    const base64 = `data:${mime};base64,${buffer.toString("base64")}`;
-    return { name: base ? path.relative(base, file) : file, file, base64 };
+function imageToBase64(file: string, base: string) {
+    return new Promise<Variable>((resolve, reject) => {
+        fs.readFile(file, (error, buffer) => {
+            if (error) {
+                reject(error);
+            } else {
+                const mime = fileType(buffer).mime;
+                const base64 = `data:${mime};base64,${buffer.toString("base64")}`;
+                resolve({ name: base ? path.relative(base, file) : file, file, base64 });
+            }
+        });
+    });
 }
 
 async function writeVariables(argv: minimist.ParsedArgs, variables: Variable[]) {
