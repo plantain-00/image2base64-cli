@@ -49,45 +49,44 @@ async function executeCommandLine() {
         throw new Error("Error: no input files.");
     }
 
-    const filePaths: string[][] = [];
-    for (const filePath of inputFiles) {
-        filePaths.push(await globAsync(filePath));
-    }
-    const uniqFiles = uniq(flatten(filePaths));
+    Promise.all(inputFiles.map(filePath => globAsync(filePath))).then(filePaths => {
+        const uniqFiles = uniq(flatten(filePaths));
 
-    const base = argv.base;
+        const base = argv.base;
 
-    const watchMode: boolean = argv.w || argv.watch;
-    if (watchMode) {
-        const variables: Variable[] = [];
-        let count = 0;
-        chokidar.watch(inputFiles).on("all", (type: string, file: string) => {
-            printInConsole(`Detecting ${type}: ${file}`);
-            if (type === "add" || type === "change") {
-                const index = variables.findIndex(v => v.file === file);
-                imageToBase64(file, base).then(variable => {
-                    if (index === -1) {
-                        variables.push(variable);
-                    } else {
-                        variables[index] = variable;
-                    }
-                    count++;
-                    if (count >= uniqFiles.length) {
+        const watchMode: boolean = argv.w || argv.watch;
+        if (watchMode) {
+            const variables: Variable[] = [];
+            let count = 0;
+            chokidar.watch(inputFiles).on("all", (type: string, file: string) => {
+                printInConsole(`Detecting ${type}: ${file}`);
+                if (type === "add" || type === "change") {
+                    const index = variables.findIndex(v => v.file === file);
+                    imageToBase64(file, base).then(variable => {
+                        if (index === -1) {
+                            variables.push(variable);
+                        } else {
+                            variables[index] = variable;
+                        }
+                        count++;
+                        if (count >= uniqFiles.length) {
+                            writeVariables(argv, variables);
+                        }
+                    });
+                } else if (type === "unlink") {
+                    const index = variables.findIndex(v => v.file === file);
+                    if (index !== -1) {
+                        variables.splice(index, 1);
                         writeVariables(argv, variables);
                     }
-                });
-            } else if (type === "unlink") {
-                const index = variables.findIndex(v => v.file === file);
-                if (index !== -1) {
-                    variables.splice(index, 1);
-                    writeVariables(argv, variables);
                 }
-            }
-        });
-    } else if (uniqFiles.length > 0) {
-        const variables = await Promise.all(uniqFiles.map(file => imageToBase64(file, base)));
-        await writeVariables(argv, variables);
-    }
+            });
+        } else if (uniqFiles.length > 0) {
+            Promise.all(uniqFiles.map(file => imageToBase64(file, base))).then(variables => {
+                writeVariables(argv, variables);
+            });
+        }
+    });
 }
 
 function imageToBase64(file: string, base: string) {
@@ -104,19 +103,19 @@ function imageToBase64(file: string, base: string) {
     });
 }
 
-async function writeVariables(argv: minimist.ParsedArgs, variables: Variable[]) {
+function writeVariables(argv: minimist.ParsedArgs, variables: Variable[]) {
     variables.sort((v1, v2) => v1.name.localeCompare(v2.name));
     if (argv.json) {
-        await writeFileAsync(argv.json, JSON.stringify(variables, null, "  "));
+        writeFileAsync(argv.json, JSON.stringify(variables, null, "  "));
     }
     if (argv.scss) {
-        await writeFileAsync(argv.scss, variables.map(v => `$${v.name.split(".").join("-")}: '${v.base64}';\n`).join(""));
+        writeFileAsync(argv.scss, variables.map(v => `$${v.name.split(".").join("-")}: '${v.base64}';\n`).join(""));
     }
     if (argv.less) {
-        await writeFileAsync(argv.less, variables.map(v => `@${v.name.split(".").join("-")}: '${v.base64}';\n`).join(""));
+        writeFileAsync(argv.less, variables.map(v => `@${v.name.split(".").join("-")}: '${v.base64}';\n`).join(""));
     }
     if (argv.es6) {
-        await writeFileAsync(argv.es6, variables.map(v => `export const ${getVariableName(v.name)} = "${v.base64}";\n`).join(""));
+        writeFileAsync(argv.es6, variables.map(v => `export const ${getVariableName(v.name)} = "${v.base64}";\n`).join(""));
     }
 }
 
