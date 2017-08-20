@@ -1,6 +1,6 @@
 {
   "name": "image2base64-cli",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "A CLI tool to convert image file to base64 string.",
   "main": "src/index.ts",
   "scripts": {
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/plantain-00/image2base64-cli#readme",
   "devDependencies": {
     "@types/camelcase": "0.0.30",
+    "@types/chokidar": "1.7.1",
     "@types/glob": "5.0.30",
     "@types/jasmine": "2.5.53",
     "@types/minimist": "1.2.0",
@@ -43,6 +44,7 @@
   },
   "dependencies": {
     "camelcase": "4.1.0",
+    "chokidar": "1.7.0",
     "file-type": "5.2.0",
     "glob": "7.1.2",
     "lodash.flatten": "4.4.0",

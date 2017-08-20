@@ -32,6 +32,10 @@ or
 
 `image2base64-cli *.ico --scss variables.scss --less variables.less --json variables.json --es6 variables.js --base demo`
 
+or
+
+`image2base64-cli *.ico --scss variables.scss --less variables.less --json variables.json --es6 variables.js --base demo --watch`
+
 #### change logs
 
 ```
