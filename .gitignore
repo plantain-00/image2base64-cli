@@ -52,3 +52,4 @@ service-worker.js
 spec/*.xlsx
 *.d.ts
 !demo/variables.js
+spec/*.js
