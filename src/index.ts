@@ -3,14 +3,12 @@ import * as minimist from "minimist";
 import * as glob from "glob";
 import * as path from "path";
 import fileType = require("file-type");
-import flatten = require("lodash.flatten");
-import uniq = require("lodash.uniq");
 import * as camelcase from "camelcase";
 import * as chokidar from "chokidar";
 
-function globAsync(pattern: string) {
+function globAsync(pattern: string, ignore?: string | string[]) {
     return new Promise<string[]>((resolve, reject) => {
-        glob(pattern, (error, matches) => {
+        glob(pattern, { ignore }, (error, matches) => {
             if (error) {
                 reject(error);
             } else {
@@ -49,9 +47,7 @@ async function executeCommandLine() {
         throw new Error("Error: no input files.");
     }
 
-    Promise.all(inputFiles.map(filePath => globAsync(filePath))).then(filePaths => {
-        const uniqFiles = uniq(flatten(filePaths));
-
+    globAsync(argv._.length === 1 ? argv._[0] : `{${argv._.join(",")}}`).then(uniqFiles => {
         const base = argv.base;
 
         const watchMode: boolean = argv.w || argv.watch;
