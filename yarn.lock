@@ -35,9 +35,9 @@
   version "8.0.27"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.27.tgz#13fbe7e92afeecebb843d7cea6c15b521e0000e1"
 
-"@types/node@8.0.34":
-  version "8.0.34"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.34.tgz#55f801fa2ddb2a40dd6dfc15ecfe1dde9c129fe9"
+"@types/node@8.0.46":
+  version "8.0.46"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.46.tgz#6e1766b2d0ed06631d5b5f87bb8e72c8dbb6888e"
 
 "@types/node@^6.0.46":
   version "6.0.88"
@@ -784,9 +784,9 @@ file-entry-cache@^2.0.0:
     flat-cache "^1.2.1"
     object-assign "^4.0.1"
 
-file-type@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/file-type/-/file-type-7.0.1.tgz#47c201e2b6bf1631957949ff395a363659d33c85"
+file-type@7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/file-type/-/file-type-7.2.0.tgz#113cfed52e1d6959ab80248906e2f25a8cdccb74"
 
 filename-regex@^2.0.0:
   version "2.0.1"
