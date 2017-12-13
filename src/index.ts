@@ -136,6 +136,10 @@ type Variable = { name: string; file: string; base64: string; };
 executeCommandLine().then(() => {
     console.log("image to base64 success.");
 }, error => {
-    console.log(error);
+    if (error instanceof Error) {
+        console.log(error.message);
+    } else {
+        console.log(error);
+    }
     process.exit(1);
 });
