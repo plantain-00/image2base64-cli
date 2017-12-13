@@ -34,11 +34,6 @@ function getVariableName(filePath: string) {
     return camelcase(path.normalize(filePath).replace(/\\|\//g, "-"));
 }
 
-function printInConsole(message: any) {
-    // tslint:disable-next-line:no-console
-    console.log(message);
-}
-
 async function executeCommandLine() {
     const argv = minimist(process.argv.slice(2), { "--": true });
 
@@ -55,7 +50,7 @@ async function executeCommandLine() {
             const variables: Variable[] = [];
             let count = 0;
             chokidar.watch(inputFiles).on("all", (type: string, file: string) => {
-                printInConsole(`Detecting ${type}: ${file}`);
+                console.log(`Detecting ${type}: ${file}`);
                 if (type === "add" || type === "change") {
                     const index = variables.findIndex(v => v.file === file);
                     imageToBase64(file, base).then(variable => {
@@ -139,8 +134,8 @@ function writeVariables(argv: minimist.ParsedArgs, variables: Variable[]) {
 type Variable = { name: string; file: string; base64: string; };
 
 executeCommandLine().then(() => {
-    printInConsole("image to base64 success.");
+    console.log("image to base64 success.");
 }, error => {
-    printInConsole(error);
+    console.log(error);
     process.exit(1);
 });
