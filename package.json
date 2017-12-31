@@ -26,12 +26,12 @@
   },
   "homepage": "https://github.com/plantain-00/image2base64-cli#readme",
   "devDependencies": {
-    "@commitlint/cli": "5.2.6",
+    "@commitlint/cli": "5.2.8",
     "@commitlint/config-angular": "5.1.1",
     "@types/camelcase": "4.1.0",
     "@types/chokidar": "1.7.4",
     "@types/glob": "5.0.34",
-    "@types/jasmine": "2.8.2",
+    "@types/jasmine": "2.8.3",
     "@types/minimist": "1.2.0",
     "@types/node": "8.5.2",
     "clean-scripts": "1.7.0",
@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "camelcase": "4.1.0",
-    "chokidar": "1.7.0",
+    "chokidar": "2.0.0",
     "file-type": "7.4.0",
     "glob": "7.1.2",
     "minimist": "1.2.0"
