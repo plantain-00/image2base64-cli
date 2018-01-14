@@ -11,7 +11,7 @@ A CLI tool to convert image file to base64 string.
 
 ## install
 
-`npm i image2base64-cli -g`
+`yarn global add image2base64-cli`
 
 ## usage
 
