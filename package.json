@@ -30,6 +30,7 @@
     "@commitlint/config-conventional": "6.0.2",
     "@types/camelcase": "4.1.0",
     "@types/chokidar": "1.7.4",
+    "@types/file-type": "5.2.1",
     "@types/glob": "5.0.34",
     "@types/jasmine": "2.8.4",
     "@types/minimist": "1.2.0",
