@@ -1,9 +1,9 @@
 import * as fs from 'fs'
-import * as minimist from 'minimist'
-import * as glob from 'glob'
+import minimist from 'minimist'
+import glob from 'glob'
 import * as path from 'path'
-import fileType = require('file-type')
-import * as camelcase from 'camelcase'
+import fileType from 'file-type'
+import camelcase from 'camelcase'
 import * as chokidar from 'chokidar'
 import * as packageJson from '../package.json'
 
