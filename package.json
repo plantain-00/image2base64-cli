@@ -34,7 +34,7 @@
     "@types/glob": "5.0.35",
     "@types/jasmine": "2.8.6",
     "@types/minimist": "1.2.0",
-    "@types/node": "9.6.0",
+    "@types/node": "9.6.1",
     "clean-scripts": "1.7.0",
     "jasmine": "3.1.0",
     "markdownlint-cli": "0.8.1",
@@ -43,10 +43,10 @@
     "standard": "11.0.1",
     "tslint": "5.9.1",
     "tslint-config-standard": "7.0.0",
-    "typescript": "2.7.2"
+    "typescript": "2.8.1"
   },
   "dependencies": {
-    "camelcase": "4.1.0",
+    "camelcase": "5.0.0",
     "chokidar": "2.0.3",
     "file-type": "7.6.0",
     "glob": "7.1.2",
