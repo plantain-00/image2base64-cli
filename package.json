@@ -32,9 +32,9 @@
     "@types/chokidar": "1.7.5",
     "@types/file-type": "5.2.1",
     "@types/glob": "7.1.1",
-    "@types/jasmine": "2.8.9",
+    "@types/jasmine": "2.8.11",
     "@types/minimist": "1.2.0",
-    "@types/node": "10.12.2",
+    "@types/node": "10.12.5",
     "clean-release": "2.7.0",
     "clean-scripts": "1.9.2",
     "jasmine": "3.3.0",
@@ -45,7 +45,7 @@
     "tslint": "5.11.0",
     "tslint-config-standard": "8.0.1",
     "tslint-sonarts": "1.8.0",
-    "type-coverage": "1.4.1",
+    "type-coverage": "1.4.5",
     "typescript": "3.1.6"
   },
   "dependencies": {
