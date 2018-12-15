@@ -98,7 +98,7 @@ function imageToBase64(file: string, base: string) {
       if (error) {
         reject(error)
       } else {
-        const mime = fileType(buffer).mime
+        const mime = fileType(buffer)!.mime
         const base64 = `data:${mime};base64,${buffer.toString('base64')}`
         resolve({ name: base ? path.relative(base, file) : file, file, base64 })
       }
