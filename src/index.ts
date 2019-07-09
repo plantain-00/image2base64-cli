@@ -39,9 +39,21 @@ function getVariableName(filePath: string) {
   return camelcase(path.normalize(filePath).replace(/\\|\//g, '-'))
 }
 
-// tslint:disable-next-line:cognitive-complexity
+interface Argv {
+  _: string[]
+  v?: boolean
+  version?: boolean
+  base: string
+  w?: boolean
+  watch?: boolean
+  json: unknown
+  scss: unknown
+  less: unknown
+  es6: unknown
+}
+
 async function executeCommandLine() {
-  const argv = minimist(process.argv.slice(2), { '--': true })
+  const argv = minimist(process.argv.slice(2), { '--': true }) as unknown as Argv
 
   const inputFiles = argv._
   const showVersion = argv.v || argv.version
@@ -54,42 +66,40 @@ async function executeCommandLine() {
     throw new Error('Error: no input files.')
   }
 
-  globAsync(argv._.length === 1 ? argv._[0] : `{${argv._.join(',')}}`).then(uniqFiles => {
-    const base = argv.base
+  const uniqFiles = await globAsync(argv._.length === 1 ? argv._[0] : `{${argv._.join(',')}}`)
+  const base = argv.base
 
-    const watchMode: boolean = argv.w || argv.watch
-    if (watchMode) {
-      const variables: Variable[] = []
-      let count = 0
-      chokidar.watch(inputFiles).on('all', (type: string, file: string) => {
-        console.log(`Detecting ${type}: ${file}`)
-        if (type === 'add' || type === 'change') {
-          const index = variables.findIndex(v => v.file === file)
-          imageToBase64(file, base).then(variable => {
-            if (index === -1) {
-              variables.push(variable)
-            } else {
-              variables[index] = variable
-            }
-            count++
-            if (count >= uniqFiles.length) {
-              writeVariables(argv, variables)
-            }
-          })
-        } else if (type === 'unlink') {
-          const index = variables.findIndex(v => v.file === file)
-          if (index !== -1) {
-            variables.splice(index, 1)
+  const watchMode = argv.w || argv.watch
+  if (watchMode) {
+    const variables: Variable[] = []
+    let count = 0
+    chokidar.watch(inputFiles).on('all', (type: string, file: string) => {
+      console.log(`Detecting ${type}: ${file}`)
+      if (type === 'add' || type === 'change') {
+        const index = variables.findIndex(v => v.file === file)
+        imageToBase64(file, base).then(variable => {
+          if (index === -1) {
+            variables.push(variable)
+          } else {
+            variables[index] = variable
+          }
+          count++
+          if (count >= uniqFiles.length) {
             writeVariables(argv, variables)
           }
+        })
+      } else if (type === 'unlink') {
+        const index = variables.findIndex(v => v.file === file)
+        if (index !== -1) {
+          variables.splice(index, 1)
+          writeVariables(argv, variables)
         }
-      })
-    } else if (uniqFiles.length > 0) {
-      Promise.all(uniqFiles.map(file => imageToBase64(file, base))).then(variables => {
-        writeVariables(argv, variables)
-      })
-    }
-  })
+      }
+    })
+  } else if (uniqFiles.length > 0) {
+    const variables = await Promise.all(uniqFiles.map(file => imageToBase64(file, base)))
+    await writeVariables(argv, variables)
+  }
 }
 
 function imageToBase64(file: string, base: string) {
@@ -98,20 +108,24 @@ function imageToBase64(file: string, base: string) {
       if (error) {
         reject(error)
       } else {
-        const mime = fileType(buffer)!.mime
-        const base64 = `data:${mime};base64,${buffer.toString('base64')}`
-        resolve({ name: base ? path.relative(base, file) : file, file, base64 })
+        const fileTypeResult = fileType(buffer)
+        if (fileTypeResult) {
+          const mime = fileTypeResult.mime
+          const base64 = `data:${mime};base64,${buffer.toString('base64')}`
+          resolve({ name: base ? path.relative(base, file) : file, file, base64 })
+        } else {
+          reject(new Error('no valid file type'))
+        }
       }
     })
   })
 }
 
-// tslint:disable-next-line:cognitive-complexity
-function writeVariables(argv: minimist.ParsedArgs, variables: Variable[]) {
+async function writeVariables(argv: Argv, variables: Variable[]) {
   variables.sort((v1, v2) => v1.name.localeCompare(v2.name))
   if (argv.json) {
     if (typeof argv.json === 'string') {
-      writeFileAsync(argv.json, JSON.stringify(variables, null, '  '))
+      await writeFileAsync(argv.json, JSON.stringify(variables, null, '  '))
     } else {
       console.log(JSON.stringify(variables, null, '  '))
     }
@@ -119,7 +133,7 @@ function writeVariables(argv: minimist.ParsedArgs, variables: Variable[]) {
   if (argv.scss) {
     const content = generatedHead + variables.map(v => `$${v.name.split('.').join('-')}: '${v.base64}';\n`).join('')
     if (typeof argv.scss === 'string') {
-      writeFileAsync(argv.scss, content)
+      await writeFileAsync(argv.scss, content)
     } else {
       console.log(content)
     }
@@ -127,7 +141,7 @@ function writeVariables(argv: minimist.ParsedArgs, variables: Variable[]) {
   if (argv.less) {
     const content = generatedHead + variables.map(v => `@${v.name.split('.').join('-')}: '${v.base64}';\n`).join('')
     if (typeof argv.less === 'string') {
-      writeFileAsync(argv.less, content)
+      await writeFileAsync(argv.less, content)
     } else {
       console.log(content)
     }
@@ -137,25 +151,25 @@ function writeVariables(argv: minimist.ParsedArgs, variables: Variable[]) {
     const wantTypescript = typeof es6 === 'string' && es6.endsWith('.ts')
     let content = generatedHead
     if (wantTypescript) {
-      content += '// tslint:disable\n'
+      content += '// tslint:disable\n// eslint:disable\n'
     } else {
       content += '// eslint:disable\n'
     }
     content += variables.map(v => `export const ${getVariableName(v.name)} = \`${v.base64}\`\n`).join('')
     if (wantTypescript) {
-      content += '// tslint:enable\n'
+      content += '// tslint:enable\n// eslint:enable\n'
     } else {
       content += '// eslint:enable\n'
     }
     if (typeof es6 === 'string') {
-      writeFileAsync(es6, content)
+      await writeFileAsync(es6, content)
     } else {
       console.log(content)
     }
   }
 }
 
-type Variable = { name: string; file: string; base64: string; }
+interface Variable { name: string; file: string; base64: string; }
 
 const generatedHead = `/**
  * This file is generated by 'image2base64-cli'
@@ -165,7 +179,7 @@ const generatedHead = `/**
 
 executeCommandLine().then(() => {
   console.log('image to base64 success.')
-}, error => {
+}, (error: unknown) => {
   if (error instanceof Error) {
     console.log(error.message)
   } else {
