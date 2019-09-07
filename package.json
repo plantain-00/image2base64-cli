@@ -55,7 +55,7 @@
   "dependencies": {
     "camelcase": "5.3.1",
     "chokidar": "3.0.2",
-    "file-type": "12.2.0",
+    "file-type": "12.3.0",
     "glob": "7.1.4",
     "minimist": "1.2.0",
     "tslib": "1.10.0"
