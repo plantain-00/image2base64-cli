@@ -2,9 +2,10 @@ import * as fs from 'fs'
 import minimist from 'minimist'
 import glob from 'glob'
 import * as path from 'path'
-import fileType from 'file-type'
+import { fromBuffer } from 'file-type'
 import camelcase from 'camelcase'
 import * as chokidar from 'chokidar'
+import * as util from 'util'
 import * as packageJson from '../package.json'
 
 function showToolVersion() {
@@ -23,17 +24,7 @@ function globAsync(pattern: string, ignore?: string | string[]) {
   })
 }
 
-function writeFileAsync(filename: string, data: string) {
-  return new Promise<void>((resolve, reject) => {
-    fs.writeFile(filename, data, (error) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve()
-      }
-    })
-  })
-}
+const writeFileAsync = util.promisify(fs.writeFile)
 
 function getVariableName(filePath: string) {
   return camelcase(path.normalize(filePath).replace(/\\|\//g, '-'))
@@ -102,23 +93,18 @@ async function executeCommandLine() {
   }
 }
 
-function imageToBase64(file: string, base: string) {
-  return new Promise<Variable>((resolve, reject) => {
-    fs.readFile(file, (error, buffer) => {
-      if (error) {
-        reject(error)
-      } else {
-        const fileTypeResult = fileType(buffer)
-        if (fileTypeResult) {
-          const mime = fileTypeResult.mime
-          const base64 = `data:${mime};base64,${buffer.toString('base64')}`
-          resolve({ name: base ? path.relative(base, file) : file, file, base64 })
-        } else {
-          reject(new Error('no valid file type'))
-        }
-      }
-    })
-  })
+const readFileAsync = util.promisify(fs.readFile)
+
+async function imageToBase64(file: string, base: string) {
+  const buffer = await readFileAsync(file)
+  const fileTypeResult = await fromBuffer(buffer)
+  if (fileTypeResult) {
+    const mime = fileTypeResult.mime
+    const base64 = `data:${mime};base64,${buffer.toString('base64')}`
+    return { name: base ? path.relative(base, file) : file, file, base64 }
+  } else {
+    throw new Error('no valid file type')
+  }
 }
 
 async function writeVariables(argv: Argv, variables: Variable[]) {
