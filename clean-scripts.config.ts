@@ -1,12 +1,12 @@
-const { checkGitStatus } = require('clean-scripts')
+import { checkGitStatus } from 'clean-scripts'
 
-const tsFiles = `"src/**/*.ts" "spec/**/*.ts"`
+const tsFiles = `"src/**/*.ts"`
 const jsFiles = `"*.config.js"`
 
 const tscSrcCommand = `tsc -p src`
 const demoCommand = 'node dist/index.js demo/*.ico --json demo/variables.json --scss demo/variables.scss --less demo/variables.less --es6 demo/variables.js --base demo'
 
-module.exports = {
+export default {
   build: [
     `rimraf dist/`,
     tscSrcCommand,
@@ -21,9 +21,7 @@ module.exports = {
     typeCoverage: 'type-coverage -p src --strict'
   },
   test: [
-    'tsc -p spec',
-    'jasmine',
-    'clean-release --config clean-run.config.js',
+    'clean-release --config clean-run.config.ts',
     () => checkGitStatus()
   ],
   fix: `eslint --ext .js,.ts ${tsFiles} ${jsFiles} --fix`,
