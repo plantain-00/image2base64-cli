@@ -38,6 +38,19 @@ or
 
 `image2base64-cli *.ico --scss variables.scss --less variables.less --json variables.json --es6 variables.js --base demo --watch`
 
+## options
+
+key | description
+--- | ---
+-w,--watch | watch mode
+--base | base directory
+--json | generate json file of variables
+--scss | generate scss file
+--less | generate less file
+--es6 | generate es6 file
+-h,--help | Print this message.
+-v,--version | Print the version
+
 ## change logs
 
 ```txt

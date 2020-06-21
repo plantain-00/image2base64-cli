@@ -12,6 +12,27 @@ function showToolVersion() {
   console.log(`Version: ${packageJson.version}`)
 }
 
+function showHelp() {
+  console.log(`Version ${packageJson.version}
+Syntax:   image2base64-cli [options] [file...]
+Examples: image2base64-cli favicon.ico --scss
+          image2base64-cli *.ico --scss variables.scss
+          image2base64-cli *.ico --less variables.less
+          image2base64-cli *.ico --es6 variables.js
+          image2base64-cli *.ico --scss variables.scss --less variables.less --json variables.json --es6 variables.js --base demo
+          image2base64-cli *.ico --scss variables.scss --less variables.less --json variables.json --es6 variables.js --base demo --watch
+Options:
+ -h, --help                                         Print this message.
+ -v, --version                                      Print the version
+ -w, --watch                                        Watch mode
+ --base                                             Base directory
+ --json                                             Generate json file of variables
+ --scss                                             Generate scss file
+ --less                                             Generate less file
+ --es6                                              Generate es6 file
+`)
+}
+
 function globAsync(pattern: string, ignore?: string | string[]) {
   return new Promise<string[]>((resolve, reject) => {
     glob(pattern, { ignore }, (error, matches) => {
@@ -41,6 +62,8 @@ interface Argv {
   scss: unknown
   less: unknown
   es6: unknown
+  h?: unknown
+  help?: unknown
 }
 
 async function executeCommandLine() {
@@ -50,6 +73,11 @@ async function executeCommandLine() {
   const showVersion = argv.v || argv.version
   if (showVersion) {
     showToolVersion()
+    return
+  }
+
+  if (argv.h || argv.help) {
+    showHelp()
     return
   }
 
