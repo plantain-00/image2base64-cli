@@ -29,8 +29,6 @@
   },
   "homepage": "https://github.com/plantain-00/image2base64-cli#readme",
   "devDependencies": {
-    "@commitlint/cli": "9.0.1",
-    "@commitlint/config-conventional": "9.0.1",
     "@types/file-type": "10.9.1",
     "@types/glob": "7.1.2",
     "@types/minimist": "1.2.0",
