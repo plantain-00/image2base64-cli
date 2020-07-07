@@ -54,7 +54,7 @@
     "file-type": "14",
     "glob": "7",
     "minimist": "1",
-    "tslib": "2"
+    "tslib": "1 || 2"
   },
   "bin": {
     "image2base64-cli": "./bin/image2base64"
