@@ -85,7 +85,7 @@ async function executeCommandLine() {
     throw new Error('Error: no input files.')
   }
 
-  const uniqFiles = await globAsync(argv._.length === 1 ? argv._[0] : `{${argv._.join(',')}}`)
+  const uniqFiles = await globAsync(argv._.length === 1 ? argv._[0]! : `{${argv._.join(',')}}`)
   const base = argv.base
 
   const watchMode = argv.w || argv.watch
